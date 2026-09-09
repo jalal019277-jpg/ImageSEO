@@ -1,4 +1,5 @@
 @echo off
+color 0A
 echo ==========================================
 echo Starting Git Auto Push Process...
 echo ==========================================
@@ -13,14 +14,16 @@ git add .
 
 :: Commit message pawa (user er kach theke input nibe ba default message use korbe)
 set /p commitMsg="Enter commit message (or press enter for default): "
-if "%commitMsg%"=="" set commitMsg="Update image optimization and metadata logic"
+if "%commitMsg%"=="" (
+    set commitMsg=Committing changes...
+)
 
 :: Commit kora
 echo.
 echo Committing changes...
 git commit -m "%commitMsg%"
 
-:: GitHub e push kora (main branch ধরে)
+:: GitHub e push kora (main branch dhore)
 echo.
 echo Pushing to GitHub (main branch)...
 git push origin main
