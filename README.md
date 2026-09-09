@@ -147,6 +147,17 @@ Because the app accepts base64, step 6 is optional for a quick MVP: return
   proxy re-serves the file with `Content-Disposition: attachment` so it saves under the
   AI-generated SEO filename. It refuses non-HTTP schemes, loopback/private hosts, and files over 25 MB.
 
+## Dependency security
+
+`package.json` carries an `overrides` entry pinning `postcss` to `^8.5.28`. Next.js 15.5.x depends
+on `postcss@8.4.31`, which carries build-time source-map path-traversal advisories; the override
+lifts every copy in the tree to the patched release. `npm audit` reports zero vulnerabilities with
+it in place — remove it only after moving to a Next.js release that ships a patched postcss itself.
+
+```bash
+npm audit          # should report: found 0 vulnerabilities
+```
+
 ## Scripts
 
 ```bash
