@@ -2,8 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Remote images are rendered with plain <img> tags (the sources are arbitrary
-  // user-supplied URLs), so no next/image remotePatterns are required.
+  // Previews use blob: and data: URLs from local processing, so next/image
+  // remote patterns are not needed.
   poweredByHeader: false,
 };
 

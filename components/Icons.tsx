@@ -145,3 +145,12 @@ export function CodeIcon(props: IconProps) {
     </Base>
   );
 }
+
+export function TagIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M3.5 11.3V4.5a1 1 0 0 1 1-1h6.8a1 1 0 0 1 .7.3l8 8a1 1 0 0 1 0 1.4l-6.8 6.8a1 1 0 0 1-1.4 0l-8-8a1 1 0 0 1-.3-.7Z" />
+      <circle cx="7.8" cy="7.8" r="1.3" />
+    </Base>
+  );
+}

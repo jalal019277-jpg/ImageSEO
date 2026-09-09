@@ -5,40 +5,28 @@ import { useEffect, useState } from 'react';
 import { CheckIcon } from '@/components/Icons';
 import { cn } from '@/lib/utils';
 
-interface Stage {
-  label: string;
-  detail: string;
-  /** Seconds after submit when this stage starts. */
-  startsAt: number;
-}
-
-const STAGES: Stage[] = [
-  { label: 'Fetching image…', detail: 'Downloading the source file', startsAt: 0 },
-  { label: 'Analyzing image…', detail: 'Reading composition, subject and context', startsAt: 3 },
-  { label: 'Generating SEO…', detail: 'Writing filename, alt text, title and description', startsAt: 9 },
-  { label: 'Optimizing…', detail: 'Compressing and converting the output file', startsAt: 17 },
-  { label: 'Finishing up…', detail: 'Packaging results for download', startsAt: 26 },
+const STAGES = [
+  { label: 'Uploading image…', detail: 'Sending the file to the local processor', startsAt: 0 },
+  { label: 'Optimizing…', detail: 'Resizing and re-encoding with sharp', startsAt: 0.9 },
+  { label: 'Embedding metadata…', detail: 'Writing your fields into the image binary', startsAt: 2 },
 ];
 
 /**
- * n8n does not stream progress, so the stage list is time-based: it tells the
- * user what the workflow is doing rather than claiming exact progress.
+ * Processing is local and usually sub-second, so the stages are a short,
+ * honest description of the pipeline rather than a fake progress bar.
  */
-export function ProcessingState({ useAiAnalysis }: { useAiAnalysis: boolean }) {
+export function ProcessingState() {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
     const started = Date.now();
-    const timer = window.setInterval(() => {
-      setElapsed((Date.now() - started) / 1000);
-    }, 250);
+    const timer = window.setInterval(() => setElapsed((Date.now() - started) / 1000), 150);
     return () => window.clearInterval(timer);
   }, []);
 
-  const stages = useAiAnalysis ? STAGES : STAGES.filter((stage) => stage.label !== 'Analyzing image…');
-  const activeIndex = Math.min(
-    stages.length - 1,
-    stages.reduce((current, stage, index) => (elapsed >= stage.startsAt ? index : current), 0),
+  const activeIndex = STAGES.reduce(
+    (current, stage, index) => (elapsed >= stage.startsAt ? index : current),
+    0,
   );
 
   return (
@@ -50,16 +38,14 @@ export function ProcessingState({ useAiAnalysis }: { useAiAnalysis: boolean }) {
         </span>
         <div>
           <h2 className="text-lg font-semibold tracking-tight text-ink-900">
-            {stages[activeIndex]?.label ?? 'Working…'}
+            {STAGES[activeIndex].label}
           </h2>
-          <p className="text-sm text-ink-500">
-            {stages[activeIndex]?.detail} · {Math.round(elapsed)}s elapsed
-          </p>
+          <p className="text-sm text-ink-500">{STAGES[activeIndex].detail}</p>
         </div>
       </div>
 
       <ol className="mt-6 flex flex-col gap-3">
-        {stages.map((stage, index) => {
+        {STAGES.map((stage, index) => {
           const done = index < activeIndex;
           const active = index === activeIndex;
           return (
@@ -84,25 +70,15 @@ export function ProcessingState({ useAiAnalysis }: { useAiAnalysis: boolean }) {
               >
                 {stage.label}
               </span>
-              {active ? (
-                <span className="ml-auto h-1.5 w-24 overflow-hidden rounded-full bg-ink-100">
-                  <span className="skeleton block h-full w-full rounded-full" />
-                </span>
-              ) : null}
             </li>
           );
         })}
       </ol>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        <div className="h-40 rounded-xl skeleton" />
-        <div className="h-40 rounded-xl skeleton" />
+        <div className="skeleton h-40 rounded-xl" />
+        <div className="skeleton h-40 rounded-xl" />
       </div>
-
-      <p className="mt-4 text-xs text-ink-400">
-        Large images with AI analysis enabled can take up to a couple of minutes. Keep this tab
-        open.
-      </p>
     </section>
   );
 }

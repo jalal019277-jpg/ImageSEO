@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { ErrorBanner } from '@/components/ErrorBanner';
 import { Footer } from '@/components/Footer';
@@ -9,7 +9,7 @@ import { ImageSeoForm, INITIAL_FORM_VALUES } from '@/components/ImageSeoForm';
 import { ProcessingState } from '@/components/ProcessingState';
 import { ResultsPanel } from '@/components/ResultsPanel';
 import { ImageSeoRequestError, optimizeImage } from '@/services/imageSeoService';
-import type { ImageSeoFormValues, ImageSeoResult } from '@/types';
+import type { ImageSeoFormValues, OptimizeResult } from '@/types';
 
 type Status = 'idle' | 'processing' | 'success' | 'error';
 
@@ -19,42 +19,53 @@ interface ErrorState {
 }
 
 export default function HomePage() {
+  const [file, setFile] = useState<File | null>(null);
   const [values, setValues] = useState<ImageSeoFormValues>(INITIAL_FORM_VALUES);
   const [status, setStatus] = useState<Status>('idle');
-  const [result, setResult] = useState<ImageSeoResult | null>(null);
+  const [result, setResult] = useState<OptimizeResult | null>(null);
   const [error, setError] = useState<ErrorState | null>(null);
+  const [originalPreviewUrl, setOriginalPreviewUrl] = useState<string | null>(null);
 
   const outputRef = useRef<HTMLDivElement | null>(null);
 
+  // The "before" preview is the local file, so it never needs a round trip.
+  useEffect(() => {
+    if (!file) {
+      setOriginalPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    setOriginalPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
   const scrollToOutput = useCallback(() => {
-    // Wait for the panel to mount before scrolling to it.
     window.requestAnimationFrame(() => {
       outputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }, []);
 
   const handleSubmit = useCallback(async () => {
+    if (!file) return;
+
     setStatus('processing');
     setError(null);
     setResult(null);
     scrollToOutput();
 
     try {
-      const data = await optimizeImage(values);
+      const data = await optimizeImage(file, values);
       setResult(data);
       setStatus('success');
       scrollToOutput();
     } catch (caught) {
       setError({
-        message:
-          caught instanceof ImageSeoRequestError
-            ? caught.message
-            : 'The optimization request failed.',
+        message: caught instanceof ImageSeoRequestError ? caught.message : 'The optimization failed.',
         details: caught instanceof ImageSeoRequestError ? caught.details : undefined,
       });
       setStatus('error');
     }
-  }, [scrollToOutput, values]);
+  }, [file, scrollToOutput, values]);
 
   const handleReset = useCallback(() => {
     setResult(null);
@@ -69,6 +80,8 @@ export default function HomePage() {
 
       <div className="mt-12 sm:mt-14">
         <ImageSeoForm
+          file={file}
+          onFileChange={setFile}
           values={values}
           onChange={setValues}
           onSubmit={handleSubmit}
@@ -76,7 +89,7 @@ export default function HomePage() {
         />
       </div>
 
-      <div ref={outputRef} className="mt-8 scroll-mt-8 flex flex-col gap-6">
+      <div ref={outputRef} className="mt-8 flex scroll-mt-8 flex-col gap-6">
         {status === 'error' && error ? (
           <ErrorBanner
             message={error.message}
@@ -88,10 +101,14 @@ export default function HomePage() {
           />
         ) : null}
 
-        {status === 'processing' ? <ProcessingState useAiAnalysis={values.use_ai_analysis} /> : null}
+        {status === 'processing' ? <ProcessingState /> : null}
 
         {status === 'success' && result ? (
-          <ResultsPanel result={result} onReset={handleReset} />
+          <ResultsPanel
+            result={result}
+            originalPreviewUrl={originalPreviewUrl}
+            onReset={handleReset}
+          />
         ) : null}
       </div>
 

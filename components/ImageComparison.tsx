@@ -6,9 +6,17 @@ import { useState } from 'react';
 
 import { GaugeIcon, ImageIcon } from '@/components/Icons';
 import { cn, formatBytes, formatDimensions } from '@/lib/utils';
-import type { ImageDetails } from '@/types';
 
-function Preview({ label, image, accent }: { label: string; image: ImageDetails; accent?: boolean }) {
+/** A preview source plus the numbers shown beneath it. */
+interface PreviewImage {
+  url: string | null;
+  size_bytes: number | null;
+  width: number | null;
+  height: number | null;
+  format: string | null;
+}
+
+function Preview({ label, image, accent }: { label: string; image: PreviewImage; accent?: boolean }) {
   const [broken, setBroken] = useState(false);
 
   return (
@@ -41,7 +49,6 @@ function Preview({ label, image, accent }: { label: string; image: ImageDetails;
             alt={`${label} preview`}
             onError={() => setBroken(true)}
             className="max-h-64 w-auto max-w-full rounded-lg object-contain shadow-sm"
-            loading="lazy"
           />
         ) : (
           <div className="flex flex-col items-center gap-2 py-10 text-ink-300">
@@ -68,8 +75,8 @@ function Preview({ label, image, accent }: { label: string; image: ImageDetails;
 }
 
 interface ImageComparisonProps {
-  original: ImageDetails;
-  optimized: ImageDetails;
+  original: PreviewImage;
+  optimized: PreviewImage;
   reductionPercent: number | null;
 }
 
