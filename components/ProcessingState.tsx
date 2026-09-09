@@ -33,14 +33,14 @@ export function ProcessingState() {
     <section className="card animate-rise p-6 sm:p-8" aria-live="polite" aria-busy="true">
       <div className="flex items-center gap-3">
         <span className="relative flex h-10 w-10 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border-2 border-brand-100" />
+          <span className="absolute inset-0 rounded-full border-2 border-accent-line" />
           <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-brand-600" />
         </span>
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-ink-900">
+          <h2 className="text-lg font-semibold tracking-tight text-fg">
             {STAGES[activeIndex].label}
           </h2>
-          <p className="text-sm text-ink-500">{STAGES[activeIndex].detail}</p>
+          <p className="text-sm text-fg-muted">{STAGES[activeIndex].detail}</p>
         </div>
       </div>
 
@@ -53,9 +53,9 @@ export function ProcessingState() {
               <span
                 className={cn(
                   'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-semibold transition',
-                  done && 'border-brand-600 bg-brand-600 text-white',
-                  active && 'border-brand-500 bg-white text-brand-600',
-                  !done && !active && 'border-ink-200 bg-white text-ink-300',
+                  done && 'border-accent bg-accent text-white',
+                  active && 'border-accent bg-surface text-accent',
+                  !done && !active && 'border-line bg-surface text-fg-subtle',
                 )}
               >
                 {done ? <CheckIcon className="h-3.5 w-3.5" strokeWidth={3} /> : index + 1}
@@ -63,9 +63,9 @@ export function ProcessingState() {
               <span
                 className={cn(
                   'text-sm transition',
-                  done && 'text-ink-500',
-                  active && 'font-medium text-ink-900',
-                  !done && !active && 'text-ink-400',
+                  done && 'text-fg-muted',
+                  active && 'font-medium text-fg',
+                  !done && !active && 'text-fg-subtle',
                 )}
               >
                 {stage.label}

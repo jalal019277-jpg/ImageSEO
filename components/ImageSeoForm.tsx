@@ -193,8 +193,8 @@ export function ImageSeoForm({
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="quality" className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-medium text-ink-800">Quality</span>
-                <span className="text-sm font-semibold tabular-nums text-brand-700">
+                <span className="text-sm font-medium text-fg">Quality</span>
+                <span className="text-sm font-semibold tabular-nums text-accent-fg">
                   {losslessFormat ? 'lossless' : values.quality}
                 </span>
               </label>
@@ -209,7 +209,7 @@ export function ImageSeoForm({
                 disabled={isSubmitting || losslessFormat}
                 className="mt-3 w-full accent-brand-600 disabled:opacity-40"
               />
-              <p className="mt-1.5 text-xs text-ink-500">
+              <p className="mt-1.5 text-xs text-fg-muted">
                 {losslessFormat
                   ? 'PNG is lossless, so quality does not apply.'
                   : '82 is a good balance. Below 60 starts to show.'}
@@ -240,9 +240,9 @@ export function ImageSeoForm({
         <button
           type="submit"
           disabled={isSubmitting || !file}
-          className="group flex w-full items-center justify-center gap-2.5 rounded-2xl bg-ink-900 px-6 py-4 text-base font-semibold text-white shadow-[0_18px_40px_-18px_rgba(20,25,54,0.9)] transition hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+          className="group flex w-full items-center justify-center gap-2.5 rounded-2xl bg-fg px-6 py-4 text-base font-semibold text-surface shadow-[0_18px_40px_-18px_rgba(20,25,54,0.9)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <SparklesIcon className="h-5 w-5 text-brand-200" />
+          <SparklesIcon className="h-5 w-5 text-accent" />
           {isSubmitting ? 'Optimizing…' : !file ? 'Choose an image to continue' : 'Optimize & embed metadata'}
           {!isSubmitting && file ? (
             <ArrowRightIcon className="h-4 w-4 transition group-hover:translate-x-0.5" />

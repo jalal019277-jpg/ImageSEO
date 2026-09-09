@@ -38,14 +38,14 @@ export function ResultsPanel({ result, originalPreviewUrl, onReset }: ResultsPan
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3.5 py-1.5 text-sm font-medium text-emerald-700 ring-1 ring-emerald-100">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+        <div className="inline-flex items-center gap-2 rounded-full bg-ok-soft px-3.5 py-1.5 text-sm font-medium text-ok-fg ring-1 ring-ok-line">
+          <span className="h-2 w-2 rounded-full bg-ok-dot" />
           Optimized and tagged
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20"
+          className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2 text-sm font-medium text-fg-muted transition hover:border-accent hover:text-accent-fg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/20"
         >
           <RefreshIcon className="h-4 w-4" />
           Optimize another image
@@ -62,21 +62,21 @@ export function ResultsPanel({ result, originalPreviewUrl, onReset }: ResultsPan
         <button
           type="button"
           onClick={handleDownloadImage}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-brand-600 px-6 py-4 text-base font-semibold text-white shadow-[0_18px_40px_-18px_rgba(79,70,229,0.95)] transition hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/30"
+          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-accent px-6 py-4 text-base font-semibold text-white shadow-[0_18px_40px_-18px_rgba(79,70,229,0.95)] transition hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
         >
           <DownloadIcon className="h-5 w-5" />
           Download Optimized Image
         </button>
 
-        <p className="mt-3 text-center text-sm text-ink-500">
+        <p className="mt-3 text-center text-sm text-fg-muted">
           Saves as{' '}
-          <span className="rounded-md bg-ink-100 px-2 py-0.5 font-mono text-[13px] text-ink-800">
+          <span className="rounded-md bg-surface-2 px-2 py-0.5 font-mono text-[13px] text-fg">
             {filename}
           </span>
         </p>
 
         {downloadError ? (
-          <p className="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-red-600">
+          <p className="mt-3 flex items-center justify-center gap-2 text-sm font-medium text-danger-fg">
             <AlertIcon className="h-4 w-4" />
             {downloadError}
           </p>

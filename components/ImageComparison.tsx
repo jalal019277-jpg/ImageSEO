@@ -22,21 +22,21 @@ function Preview({ label, image, accent }: { label: string; image: PreviewImage;
   return (
     <div
       className={cn(
-        'flex flex-col overflow-hidden rounded-xl border bg-white',
-        accent ? 'border-brand-200 ring-1 ring-brand-100' : 'border-ink-200',
+        'flex flex-col overflow-hidden rounded-xl border bg-surface',
+        accent ? 'border-accent-line ring-1 ring-accent-line' : 'border-line',
       )}
     >
-      <div className="flex items-center justify-between gap-2 border-b border-ink-100 px-4 py-2.5">
+      <div className="flex items-center justify-between gap-2 border-b border-line px-4 py-2.5">
         <span
           className={cn(
             'text-xs font-semibold uppercase tracking-[0.12em]',
-            accent ? 'text-brand-600' : 'text-ink-400',
+            accent ? 'text-accent' : 'text-fg-subtle',
           )}
         >
           {label}
         </span>
         {image.format ? (
-          <span className="rounded-md bg-ink-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-ink-600">
+          <span className="rounded-md bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase text-fg-muted">
             {image.format}
           </span>
         ) : null}
@@ -51,21 +51,21 @@ function Preview({ label, image, accent }: { label: string; image: PreviewImage;
             className="max-h-64 w-auto max-w-full rounded-lg object-contain shadow-sm"
           />
         ) : (
-          <div className="flex flex-col items-center gap-2 py-10 text-ink-300">
+          <div className="flex flex-col items-center gap-2 py-10 text-fg-subtle">
             <ImageIcon className="h-8 w-8" />
             <span className="text-xs">Preview unavailable</span>
           </div>
         )}
       </div>
 
-      <dl className="grid grid-cols-2 gap-px border-t border-ink-100 bg-ink-100 text-sm">
-        <div className="bg-white px-4 py-3">
-          <dt className="text-[11px] uppercase tracking-wide text-ink-400">File size</dt>
-          <dd className="mt-0.5 font-semibold text-ink-900">{formatBytes(image.size_bytes)}</dd>
+      <dl className="grid grid-cols-2 gap-px border-t border-line bg-surface-2 text-sm">
+        <div className="bg-surface px-4 py-3">
+          <dt className="text-[11px] uppercase tracking-wide text-fg-subtle">File size</dt>
+          <dd className="mt-0.5 font-semibold text-fg">{formatBytes(image.size_bytes)}</dd>
         </div>
-        <div className="bg-white px-4 py-3">
-          <dt className="text-[11px] uppercase tracking-wide text-ink-400">Dimensions</dt>
-          <dd className="mt-0.5 font-semibold text-ink-900">
+        <div className="bg-surface px-4 py-3">
+          <dt className="text-[11px] uppercase tracking-wide text-fg-subtle">Dimensions</dt>
+          <dd className="mt-0.5 font-semibold text-fg">
             {formatDimensions(image.width, image.height)}
           </dd>
         </div>
@@ -92,8 +92,8 @@ export function ImageComparison({ original, optimized, reductionPercent }: Image
     <section className="card animate-rise p-6 sm:p-7">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-semibold tracking-tight text-ink-900">Before & after</h2>
-          <p className="mt-0.5 text-sm text-ink-500">
+          <h2 className="text-lg font-semibold tracking-tight text-fg">Before & after</h2>
+          <p className="mt-0.5 text-sm text-fg-muted">
             Same image, smaller payload — and a filename search engines can read.
           </p>
         </div>
@@ -101,7 +101,7 @@ export function ImageComparison({ original, optimized, reductionPercent }: Image
         <div
           className={cn(
             'flex items-center gap-3 rounded-xl px-4 py-3',
-            improved ? 'bg-emerald-50 text-emerald-700' : 'bg-ink-100 text-ink-600',
+            improved ? 'bg-ok-soft text-ok-fg' : 'bg-surface-2 text-fg-muted',
           )}
         >
           <GaugeIcon className="h-5 w-5" />

@@ -2,12 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { BiomechPanel } from '@/components/BiomechBrand';
 import { ErrorBanner } from '@/components/ErrorBanner';
 import { Footer } from '@/components/Footer';
 import { Hero } from '@/components/Hero';
+import { IntegrationSection } from '@/components/IntegrationSection';
 import { ImageSeoForm, INITIAL_FORM_VALUES } from '@/components/ImageSeoForm';
 import { ProcessingState } from '@/components/ProcessingState';
 import { ResultsPanel } from '@/components/ResultsPanel';
+import { SiteHeader } from '@/components/SiteHeader';
 import { ImageSeoRequestError, optimizeImage } from '@/services/imageSeoService';
 import type { ImageSeoFormValues, OptimizeResult } from '@/types';
 
@@ -75,7 +78,8 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+    <main className="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6">
+      <SiteHeader />
       <Hero />
 
       <div className="mt-12 sm:mt-14">
@@ -110,6 +114,11 @@ export default function HomePage() {
             onReset={handleReset}
           />
         ) : null}
+      </div>
+
+      <div className="mt-8 flex flex-col gap-6">
+        <IntegrationSection />
+        <BiomechPanel />
       </div>
 
       <Footer />

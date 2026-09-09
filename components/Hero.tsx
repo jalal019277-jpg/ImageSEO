@@ -21,19 +21,19 @@ const HIGHLIGHTS = [
 export function Hero() {
   return (
     <header className="flex flex-col items-center text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/70 px-3.5 py-1.5 text-xs font-medium text-brand-700 shadow-sm backdrop-blur">
+      <span className="inline-flex items-center gap-2 rounded-full border border-accent-line bg-surface/70 px-3.5 py-1.5 text-xs font-medium text-accent-fg shadow-sm backdrop-blur">
         <TagIcon className="h-3.5 w-3.5" />
         Local image optimization + embedded metadata
       </span>
 
-      <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-ink-900 sm:text-5xl">
+      <h1 className="mt-5 max-w-3xl text-4xl font-bold tracking-tight text-fg sm:text-5xl">
         Compress an image and{' '}
         <span className="bg-gradient-to-r from-brand-600 to-sky-500 bg-clip-text text-transparent">
           write your SEO into it
         </span>
       </h1>
 
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-500 sm:text-lg">
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
         Upload a file, fill in the metadata, and download a smaller image that carries your title,
         tags, description and copyright — visible in Windows Properties, not just in your CMS.
       </p>
@@ -42,13 +42,13 @@ export function Hero() {
         {HIGHLIGHTS.map((item) => (
           <li
             key={item.title}
-            className="flex flex-col items-start gap-1.5 rounded-xl border border-ink-200/80 bg-white/70 p-4 text-left backdrop-blur"
+            className="flex flex-col items-start gap-1.5 rounded-xl border border-line bg-surface/70 p-4 text-left backdrop-blur"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-accent">
               {item.icon}
             </span>
-            <p className="text-sm font-semibold text-ink-900">{item.title}</p>
-            <p className="text-xs leading-relaxed text-ink-500">{item.copy}</p>
+            <p className="text-sm font-semibold text-fg">{item.title}</p>
+            <p className="text-xs leading-relaxed text-fg-muted">{item.copy}</p>
           </li>
         ))}
       </ul>

@@ -56,14 +56,14 @@ export function ImageDropzone({ file, onSelect, disabled }: ImageDropzoneProps) 
 
   if (file && previewUrl) {
     return (
-      <div className="flex flex-col gap-3 rounded-xl border border-ink-200 bg-white p-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-4 sm:flex-row sm:items-center">
         <div className="checkerboard flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg">
           <img src={previewUrl} alt="Selected image" className="h-full w-full object-contain" />
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-ink-900">{file.name}</p>
-          <p className="mt-0.5 text-xs text-ink-500">
+          <p className="truncate text-sm font-medium text-fg">{file.name}</p>
+          <p className="mt-0.5 text-xs text-fg-muted">
             {formatBytes(file.size)} · {file.type.replace('image/', '').toUpperCase()}
           </p>
         </div>
@@ -75,7 +75,7 @@ export function ImageDropzone({ file, onSelect, disabled }: ImageDropzoneProps) 
             if (inputRef.current) inputRef.current.value = '';
           }}
           disabled={disabled}
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3 py-2 text-xs font-medium text-ink-700 transition hover:border-brand-300 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-line bg-surface px-3 py-2 text-xs font-medium text-fg-muted transition hover:border-accent hover:text-accent-fg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/20 disabled:opacity-60"
         >
           <RefreshIcon className="h-3.5 w-3.5" />
           Change
@@ -95,16 +95,16 @@ export function ImageDropzone({ file, onSelect, disabled }: ImageDropzoneProps) 
         onDrop={handleDrop}
         className={cn(
           'rounded-xl border-2 border-dashed p-8 text-center transition',
-          dragging ? 'border-brand-500 bg-brand-50/70' : 'border-ink-200 bg-white hover:border-brand-300',
+          dragging ? 'border-accent bg-accent-soft/70' : 'border-line bg-surface hover:border-accent',
           disabled && 'cursor-not-allowed opacity-60',
         )}
       >
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent-soft text-accent">
           <ImageIcon className="h-6 w-6" />
         </span>
 
-        <p className="mt-3 text-sm font-medium text-ink-900">Drop an image here</p>
-        <p className="mt-1 text-xs text-ink-500">
+        <p className="mt-3 text-sm font-medium text-fg">Drop an image here</p>
+        <p className="mt-1 text-xs text-fg-muted">
           JPG, PNG, WEBP, GIF, AVIF or TIFF · up to {formatBytes(MAX_UPLOAD_BYTES)}
         </p>
 
@@ -112,7 +112,7 @@ export function ImageDropzone({ file, onSelect, disabled }: ImageDropzoneProps) 
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={disabled}
-          className="mt-4 inline-flex items-center rounded-lg bg-ink-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-ink-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/25 disabled:cursor-not-allowed"
+          className="mt-4 inline-flex items-center rounded-lg bg-fg px-4 py-2 text-sm font-medium text-surface transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/25 disabled:cursor-not-allowed"
         >
           Browse files
         </button>
@@ -127,7 +127,7 @@ export function ImageDropzone({ file, onSelect, disabled }: ImageDropzoneProps) 
         />
       </div>
 
-      {error ? <p className="text-xs font-medium text-red-600">{error}</p> : null}
+      {error ? <p className="text-xs font-medium text-danger-fg">{error}</p> : null}
     </div>
   );
 }

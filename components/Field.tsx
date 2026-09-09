@@ -17,15 +17,15 @@ interface FieldShellProps {
 function FieldShell({ id, label, hint, error, optional, children, className }: FieldShellProps) {
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={id} className="flex items-baseline gap-2 text-sm font-medium text-ink-800">
+      <label htmlFor={id} className="flex items-baseline gap-2 text-sm font-medium text-fg">
         {label}
-        {optional ? <span className="text-xs font-normal text-ink-400">Optional</span> : null}
+        {optional ? <span className="text-xs font-normal text-fg-subtle">Optional</span> : null}
       </label>
       {children}
       {error ? (
-        <p className="text-xs font-medium text-red-600">{error}</p>
+        <p className="text-xs font-medium text-danger-fg">{error}</p>
       ) : hint ? (
-        <p className="text-xs text-ink-500">{hint}</p>
+        <p className="text-xs text-fg-muted">{hint}</p>
       ) : null}
     </div>
   );
@@ -62,7 +62,7 @@ export function TextField({
     >
       <div className="relative">
         {icon ? (
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-400">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-subtle">
             {icon}
           </span>
         ) : null}
@@ -129,15 +129,15 @@ export function SectionHeading({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600 ring-1 ring-brand-100">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent-soft text-accent ring-1 ring-accent-line">
         {icon}
       </span>
       <div className="min-w-0">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-500">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
           Step {step}
         </p>
-        <h2 className="text-lg font-semibold tracking-tight text-ink-900">{title}</h2>
-        <p className="mt-0.5 text-sm text-ink-500">{description}</p>
+        <h2 className="text-lg font-semibold tracking-tight text-fg">{title}</h2>
+        <p className="mt-0.5 text-sm text-fg-muted">{description}</p>
       </div>
     </div>
   );

@@ -1,30 +1,86 @@
 @import 'tailwindcss';
 
+/* `dark:` follows the data-theme attribute, which a blocking script in the
+   layout sets before first paint (from storage, else the OS preference). */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, sans-serif;
 
-  --color-ink-50: #f6f7fb;
-  --color-ink-100: #eceef6;
-  --color-ink-200: #d9dcea;
-  --color-ink-300: #b6bcd4;
-  --color-ink-400: #8b93b3;
-  --color-ink-500: #666e91;
-  --color-ink-600: #4b5375;
-  --color-ink-700: #363d5c;
-  --color-ink-800: #232948;
-  --color-ink-900: #141936;
-
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
   --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
   --color-brand-400: #818cf8;
   --color-brand-500: #6366f1;
   --color-brand-600: #4f46e5;
   --color-brand-700: #4338ca;
 
+  /* Semantic roles — every one of these is redefined for the dark theme. */
+  --color-page: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceef6;
+  --color-line: #d9dcea;
+  --color-line-strong: #b6bcd4;
+
+  --color-fg: #141936;
+  --color-fg-muted: #666e91;
+  --color-fg-subtle: #8b93b3;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-soft: #eef2ff;
+  --color-accent-line: #e0e7ff;
+  --color-accent-fg: #4338ca;
+
+  --color-ok-soft: #ecfdf5;
+  --color-ok-line: #a7f3d0;
+  --color-ok-fg: #047857;
+  --color-ok-dot: #10b981;
+
+  --color-danger-soft: #fef2f2;
+  --color-danger-line: #fecaca;
+  --color-danger-fg: #b91c1c;
+
+  /* Code blocks stay dark in both themes. */
+  --color-code: #141936;
+  --color-code-fg: #e0e7ff;
+
   --animate-shimmer: shimmer 1.8s linear infinite;
   --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-theme='dark'] {
+  --color-page: #0b0e1c;
+  --color-surface: #151a30;
+  --color-surface-2: #1e2440;
+  --color-line: #2b3255;
+  --color-line-strong: #3d4670;
+
+  --color-fg: #eef1fb;
+  --color-fg-muted: #a3abd0;
+  --color-fg-subtle: #767ea8;
+
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+  --color-accent-soft: #1e2450;
+  --color-accent-line: #343c6e;
+  --color-accent-fg: #a5b4fc;
+
+  --color-ok-soft: #0d2b22;
+  --color-ok-line: #1c5344;
+  --color-ok-fg: #6ee7b7;
+  --color-ok-dot: #34d399;
+
+  --color-danger-soft: #2c1418;
+  --color-danger-line: #5b2029;
+  --color-danger-fg: #fca5a5;
+
+  --color-code: #090c18;
+  --color-code-fg: #c7d2fe;
+
+  color-scheme: dark;
 }
 
 @keyframes shimmer {
@@ -52,9 +108,10 @@ html {
 }
 
 body {
-  background-color: var(--color-ink-50);
-  color: var(--color-ink-900);
+  background-color: var(--color-page);
+  color: var(--color-fg);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Soft aurora backdrop behind the whole page. */
@@ -65,22 +122,33 @@ body {
     radial-gradient(52rem 30rem at 60% 100%, rgba(168, 85, 247, 0.12), transparent 60%);
 }
 
+[data-theme='dark'] .page-backdrop {
+  background-image:
+    radial-gradient(60rem 32rem at 12% -8%, rgba(99, 102, 241, 0.22), transparent 62%),
+    radial-gradient(48rem 28rem at 92% 4%, rgba(14, 165, 233, 0.16), transparent 64%),
+    radial-gradient(52rem 30rem at 60% 100%, rgba(168, 85, 247, 0.16), transparent 62%);
+}
+
 .card {
   border-radius: 1.25rem;
-  border: 1px solid rgba(217, 220, 234, 0.9);
-  background-color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--color-line);
+  background-color: color-mix(in srgb, var(--color-surface) 88%, transparent);
   backdrop-filter: blur(6px);
-  box-shadow: 0 1px 2px rgba(20, 25, 54, 0.04), 0 12px 32px -18px rgba(20, 25, 54, 0.28);
+  box-shadow: 0 1px 2px rgba(10, 14, 30, 0.04), 0 12px 32px -18px rgba(10, 14, 30, 0.28);
+}
+
+[data-theme='dark'] .card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px -20px rgba(0, 0, 0, 0.8);
 }
 
 .field-input {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid var(--color-ink-200);
-  background-color: #fff;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-surface);
   padding: 0.625rem 0.875rem;
   font-size: 0.9375rem;
-  color: var(--color-ink-900);
+  color: var(--color-fg);
   outline: none;
   transition:
     border-color 0.15s ease,
@@ -88,38 +156,38 @@ body {
 }
 
 .field-input::placeholder {
-  color: var(--color-ink-400);
+  color: var(--color-fg-subtle);
 }
 
 .field-input:focus {
-  border-color: var(--color-brand-500);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .field-input[aria-invalid='true'] {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+  border-color: var(--color-danger-fg);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-danger-fg) 15%, transparent);
 }
 
 .skeleton {
   background-image: linear-gradient(
     90deg,
-    rgba(236, 238, 246, 0.6) 25%,
-    rgba(217, 220, 234, 0.9) 37%,
-    rgba(236, 238, 246, 0.6) 63%
+    color-mix(in srgb, var(--color-surface-2) 60%, transparent) 25%,
+    var(--color-surface-2) 37%,
+    color-mix(in srgb, var(--color-surface-2) 60%, transparent) 63%
   );
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
 }
 
-/* Checkerboard so transparent PNGs stay readable in previews. */
+/* Checkerboard so transparent images stay readable in previews. */
 .checkerboard {
-  background-color: #fff;
+  background-color: var(--color-surface);
   background-image:
-    linear-gradient(45deg, #eceef6 25%, transparent 25%),
-    linear-gradient(-45deg, #eceef6 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #eceef6 75%),
-    linear-gradient(-45deg, transparent 75%, #eceef6 75%);
+    linear-gradient(45deg, var(--color-surface-2) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--color-surface-2) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--color-surface-2) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--color-surface-2) 75%);
   background-size: 16px 16px;
   background-position:
     0 0,
