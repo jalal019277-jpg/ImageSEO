@@ -36,6 +36,53 @@ function unwrap(input: unknown, depth = 0): Json {
   return input;
 }
 
+/**
+ * LLM and AI Agent nodes hand their JSON back as text, often wrapped in a
+ * markdown code fence. Returns the parsed object, or null if it isn't JSON.
+ */
+function parseJsonString(value: unknown): Json | null {
+  if (typeof value !== 'string') return null;
+
+  let text = value.trim();
+  if (!text) return null;
+
+  const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/i.exec(text);
+  if (fenced) text = fenced[1].trim();
+
+  if (!text.startsWith('{') && !text.startsWith('[')) return null;
+
+  try {
+    const parsed: unknown = JSON.parse(text);
+    if (Array.isArray(parsed)) return isObject(parsed[0]) ? parsed[0] : null;
+    return isObject(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Walks the payload and collects every JSON object hiding inside a string. */
+function collectJsonStrings(value: unknown, found: Json[], depth = 0): void {
+  if (depth > 4 || found.length > 8) return;
+
+  if (typeof value === 'string') {
+    const parsed = parseJsonString(value);
+    if (parsed) {
+      found.push(parsed);
+      collectJsonStrings(parsed, found, depth + 1);
+    }
+    return;
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) collectJsonStrings(item, found, depth + 1);
+    return;
+  }
+
+  if (isObject(value)) {
+    for (const item of Object.values(value)) collectJsonStrings(item, found, depth + 1);
+  }
+}
+
 function pick(source: Json, keys: string[]): unknown {
   for (const key of keys) {
     const value = source[key];
@@ -221,7 +268,13 @@ function readSeo(root: Json, request: ImageSeoRequest): SeoMetadata {
 }
 
 export function normalizeN8nResponse(payload: unknown, request: ImageSeoRequest): ImageSeoResult {
-  const root = unwrap(payload);
+  const envelope = unwrap(payload);
+
+  // Fold any JSON-in-a-string back into the payload. The parsed content is the
+  // more specific answer, so it wins over the fields around it.
+  const embedded: Json[] = [];
+  collectJsonStrings(envelope, embedded);
+  const root: Json = embedded.length ? Object.assign({}, envelope, ...embedded) : envelope;
 
   const originalScope: Json = {
     ...root,
@@ -273,6 +326,7 @@ export function normalizeN8nResponse(payload: unknown, request: ImageSeoRequest)
     seo: readSeo(root, request),
     size_reduction_percent: reduction,
     use_ai_analysis: typeof aiFlag === 'boolean' ? aiFlag : request.use_ai_analysis,
-    raw: root,
+    // The untouched response, so the UI can show exactly what n8n sent back.
+    raw: payload,
   };
 }

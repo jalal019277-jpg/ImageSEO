@@ -120,7 +120,23 @@ Anything missing degrades gracefully: the submitted URL stands in for a missing 
 preview, `size_reduction_percent` is computed from the two sizes when absent, and empty
 metadata fields render as "Not returned by the workflow".
 
-### A minimal n8n workflow
+### Ready-made test workflow
+
+`n8n/ai-image-seo-optimizer.test-workflow.json` is an importable workflow that runs the whole
+round trip **without any credentials**. In n8n: *Workflows → ⋯ → Import from File*, open the JSON,
+activate it, then copy the Webhook node's Production URL into `N8N_WEBHOOK_URL`.
+
+It uses six core nodes — Webhook → Code (validate) → HTTP Request ×2 → Code (measure + write SEO)
+→ Respond to Webhook. Real resizing and format conversion happen at
+[images.weserv.nl](https://images.weserv.nl); file sizes and pixel dimensions are measured from the
+actual bytes, and the SEO copy is composed from the brand fields (honouring `use_ai_analysis`).
+
+Two things to expect: choosing **PNG output for a photo makes the file bigger**, so the reduction
+badge goes negative — that is lossless PNG behaving correctly, not a bug. And the SEO copy is
+template-written, not model-written; swap the *Build SEO response* node for an AI Agent to get real
+AI copy while keeping every other node as-is.
+
+### A minimal production workflow
 
 1. **Webhook** (POST, response mode *When Last Node Finishes*) — optionally with a Header Auth credential.
 2. **HTTP Request** — `GET {{ $json.image_url }}`, response format *File*, to pull the source image.

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { ImageComparison } from '@/components/ImageComparison';
+import { RawResponsePanel } from '@/components/RawResponsePanel';
 import { SeoMetadataCard } from '@/components/SeoMetadataCard';
 import { AlertIcon, DownloadIcon, RefreshIcon } from '@/components/Icons';
 import { downloadImage, downloadJson } from '@/lib/download';
@@ -17,6 +18,19 @@ interface ResultsPanelProps {
 export function ResultsPanel({ result, onReset }: ResultsPanelProps) {
   const [downloading, setDownloading] = useState(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  // Fields the workflow left empty — the UI fell back to the brand details for
+  // these, so it is worth calling out rather than passing them off as generated.
+  const missing = (
+    [
+      ['Title', result.seo.title],
+      ['Alt text', result.seo.alt_text],
+      ['Caption', result.seo.caption],
+      ['Description', result.seo.description],
+    ] as const
+  )
+    .filter(([, value]) => !value.trim())
+    .map(([label]) => label);
 
   const format = (result.optimized.format ?? 'webp') as OutputFormat;
   const filename = safeFilename(result.seo.filename, format);
@@ -97,6 +111,8 @@ export function ResultsPanel({ result, onReset }: ResultsPanelProps) {
         usedAiAnalysis={result.use_ai_analysis}
         onDownloadJson={handleDownloadJson}
       />
+
+      <RawResponsePanel raw={result.raw} missing={missing} />
     </div>
   );
 }
